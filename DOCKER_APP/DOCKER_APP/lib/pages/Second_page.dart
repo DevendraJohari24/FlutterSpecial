@@ -2,6 +2,7 @@ import 'package:DOCKER_APP/pages/First_Page.dart';
 import 'package:DOCKER_APP/ui/MyHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:DOCKER_APP/pages/Third_Page.dart';
+import 'package:http/http.dart' as http;
 
 class SecondPage extends StatefulWidget {
   SecondPage({Key key, this.OS_image, this.ip_address}) : super(key: key);
@@ -14,6 +15,16 @@ class SecondPage extends StatefulWidget {
 String DockerOSName;
 
 class SecondPageState extends State<SecondPage> {
+  DockerCommand(String OS_image, String DockerOSName) async {
+    String cmd = "run";
+    var url = "http://${IP}/cgi-bin/docker.py?x=docker ${cmd} " +
+        " --name ${DockerOSName} ${OS_image}";
+    print(url);
+    var r = await http.get(url);
+    Output = r.body;
+    print(Output);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -42,6 +53,7 @@ class SecondPageState extends State<SecondPage> {
                 child: FloatingActionButton(
                   onPressed: () {
                     print(DockerOSName);
+                    DockerCommand(OS_image, DockerOSName);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

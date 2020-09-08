@@ -23,16 +23,22 @@ String Output;
 class ThirdPageState extends State<ThirdPage> {
   DockerCommand(String cmd) async {
     var url;
-    if (cmd == "run") {
-      url = "http://${IP}/cgi-bin/docker.py?x=docker ${cmd} -i" +
-          " --name ${DockerOSName} ${OS_image}";
+    if (cmd == "attach") {
+      url = "http://${IP}/cgi-bin/docker.py?x=docker ${cmd}" +
+          " ${DockerOSName} ";
+      print(url);
+    } else if (cmd == "start") {
+      url =
+          "http://${IP}/cgi-bin/docker.py?x=docker ${cmd} " + "${DockerOSName}";
       print(url);
     } else {
       url = "http://${IP}/cgi-bin/docker.py?x=docker ${cmd}";
       print(url);
     }
     var r = await http.get(url);
-    Output = r.body;
+    setState(() {
+      Output = r.body;
+    });
     print(Output);
   }
 
@@ -71,7 +77,8 @@ class ThirdPageState extends State<ThirdPage> {
                 }
               },
               child: Icon(Icons.airline_seat_recline_extra),
-            )
+            ),
+            Text(Output ?? "Processing......")
           ],
         ),
       ),

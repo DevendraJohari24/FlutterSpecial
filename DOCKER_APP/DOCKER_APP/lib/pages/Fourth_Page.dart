@@ -18,7 +18,9 @@ class FourPageState extends State<FourPage> {
     var url = "http://${ip_address}/cgi-bin/docker.py?x=${cmd}";
     print(url);
     var r = await http.get(url);
-    Output = r.body;
+    setState(() {
+      Output = r.body;
+    });
     print(Output);
   }
 
@@ -54,7 +56,8 @@ class FourPageState extends State<FourPage> {
                 }
               },
               child: Icon(Icons.airline_seat_recline_extra),
-            )
+            ),
+            Text(Output ?? "Processing......")
           ],
         ),
       ),
